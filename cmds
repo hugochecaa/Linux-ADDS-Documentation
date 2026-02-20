@@ -1,0 +1,5 @@
+sudo apt install openssh-server
+sudo ufw allow 22
+sudo ufw enable
+
+sudo apt install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common-bin packagekit
