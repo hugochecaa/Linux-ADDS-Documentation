@@ -41,8 +41,9 @@ The goal of this project is to implement a centralized authentication and resour
 | Device | Role | IP Address (intnet) | IP Address (Bridge) |
 | :--- | :--- | :--- | :--- |
 | **ls09** | Domain Controller | `10.2.9.254` | `172.30.20.65`|
+| **ls09t** | Domain Controller | `10.2.9.200` | `172.30.20.68`|
 | **lc09** | Linux Client | `10.2.9.253` | `172.30.20.66`|
-| **wc09** | Windwos Client | `10.2.9.200` | `Not asigned` |
+| **wc09** | Windwos Client | `10.2.9.252` | `Not asigned` |
 
 ---
 
@@ -208,9 +209,41 @@ Then you can log in using hugo@lab09.lan as user in linux or LAB09.LAN\hugo in w
 We configured network shares with specific **ACLs (Access Control Lists)** to manage permissions based on the AD groups created in the previous step.
 
 The `smb.conf` was updated to include:
-```ini
-[Finance_Share]
-    path = /srv/samba/finance
-    read only = no
-    guest ok = no
-    valid users = @Management
+
+  ![smbconf](./resources/28.png) 
+
+### 📂 Configuration Breakdown: `[CarpetaCompartida]`
+
+Each directive in the configuration defines a specific behavior or security rule for the shared resource:
+
+* **`[CarpetaCompartida]`**: **Share Name**. This is the identifier that users will see when browsing the network.
+* **`comment`**: **Description**. A brief label used to identify the share's purpose (e.g., "Carpeta compartida de ejemplo").
+* **`path`**: **Local Path**. The absolute directory location on the server's filesystem (`/sambashare`).
+* **`browseable`**: **Visibility**. If set to `yes`, the share appears in the network resource list; if `no`, it remains hidden.
+* **`read only`**: **Write Access**. Setting this to `no` allows authorized users to create, modify, and delete files.
+* **`guest ok`**: **Authentication**. When set to `no`, anonymous access is blocked, requiring a valid set of credentials.
+* **`valid users`**: **User Restriction**. Defines exactly who is allowed to access the share (in this case, only `user1`).
+* **`create mask`**: **File Permissions**. Automatically assigns Linux permissions (0775) to any new file created within the share.
+* **`directory mask`**: **Folder Permissions**. Automatically assigns Linux permissions (0775) to any new directory created within the share.
+
+## Domain Trust
+
+First of all we will need to update both smb.conf adding the ip of the other server as dns forwarder:
+
+  ![smbconf](./resources/36.png) 
+  ![smbconf](./resources/37.png) 
+
+Then we can create the trust with samba-tool 
+
+## Other
+
+### Disk managment
+
+
+
+  ![smbconf](./resources/38.png) 
+
+And check if was created succesfully:
+
+  ![smbconf](./resources/39.png) 
+
