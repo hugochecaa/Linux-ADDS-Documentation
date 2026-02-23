@@ -235,11 +235,6 @@ First of all we will need to update both smb.conf adding the ip of the other ser
 
 Then we can create the trust with samba-tool 
 
-## Other
-
-### Disk managment
-
-
 
   ![smbconf](./resources/38.png) 
 
